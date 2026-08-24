@@ -13,6 +13,7 @@ const inputClasses =
 export default function SignupPage() {
   const router = useRouter();
   const [displayName, setDisplayName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -23,9 +24,9 @@ export default function SignupPage() {
     setError(null);
     setLoading(true);
     try {
-      const session = await signup({ email, password, displayName });
+      const session = await signup({ email, username, password, displayName });
       saveSession(session);
-      router.push("/dashboard");
+      router.push("/notes");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
     } finally {
@@ -59,6 +60,24 @@ export default function SignupPage() {
             onChange={(e) => setDisplayName(e.target.value)}
             className={inputClasses}
             placeholder="Ada Lovelace"
+          />
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="username" className="text-xs font-medium uppercase tracking-wide text-ink-soft">
+            Username
+          </label>
+          <input
+            id="username"
+            type="text"
+            required
+            minLength={3}
+            maxLength={24}
+            pattern="[a-zA-Z0-9_]+"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className={inputClasses}
+            placeholder="ada_lovelace"
           />
         </div>
 

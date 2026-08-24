@@ -17,6 +17,7 @@
   --font-hand: var(--font-patrick-hand), "Comic Sans MS", cursive;
   --font-caveat: var(--font-caveat), "Comic Sans MS", cursive;
   --font-sans: var(--font-inter), Arial, sans-serif;
+  --font-chalk: var(--font-rock-salt), "Comic Sans MS", cursive;
 }
 
 body {

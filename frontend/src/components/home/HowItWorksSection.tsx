@@ -1,3 +1,5 @@
+import { ScalesDoodle } from "./Doodles";
+
 const STEPS = [
   {
     number: "01",
@@ -18,13 +20,15 @@ const STEPS = [
 
 export default function HowItWorksSection() {
   return (
-    <section className="px-6 py-24 sm:px-14">
-      <div className="mx-auto max-w-5xl">
+    <section className="relative overflow-hidden px-6 py-24 sm:px-14">
+      <ScalesDoodle className="pointer-events-none absolute left-[6%] bottom-[8%] hidden h-20 w-20 rotate-3 text-mercury-ink opacity-[0.1] md:block" />
+
+      <div className="relative mx-auto max-w-5xl">
         <p className="mb-3 text-center text-xs uppercase tracking-[0.35em] text-mercury-ink/60">
           How it works
         </p>
         <h2 className="mb-14 text-center font-serif text-3xl text-mercury-ink sm:text-4xl">
-          Three steps, no scramble.
+          Three steps. No fuss.
         </h2>
 
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-3">

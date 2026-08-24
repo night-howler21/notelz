@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ScalesDoodle, GavelDoodle, QuillDoodle, BookDoodle } from "./Doodles";
 
 const NAV_LINKS = [
   { label: "About", href: "#about" },
@@ -40,6 +41,12 @@ export default function CoverPage() {
         aria-hidden="true"
         className="pointer-events-none absolute bottom-[8%] right-[6%] h-64 w-64 rounded-full bg-peach opacity-30 blur-3xl"
       />
+
+      {/* law-themed doodles, scattered and faint */}
+      <ScalesDoodle className="pointer-events-none absolute left-[4%] top-[38%] hidden h-20 w-20 -rotate-6 text-mercury-ink opacity-[0.12] sm:block" />
+      <GavelDoodle className="pointer-events-none absolute right-[6%] top-[30%] hidden h-16 w-16 rotate-12 text-mercury-ink opacity-[0.12] sm:block" />
+      <QuillDoodle className="pointer-events-none absolute bottom-[12%] left-[10%] hidden h-20 w-20 rotate-3 text-mercury-ink opacity-[0.12] sm:block" />
+      <BookDoodle className="pointer-events-none absolute bottom-[16%] right-[10%] hidden h-16 w-16 -rotate-6 text-mercury-ink opacity-[0.12] sm:block" />
 
       {/* top bar: brand, nav, and auth all embedded in one header row */}
       <header className="relative z-10 grid grid-cols-1 items-center gap-4 lg:grid-cols-[1fr_auto_1fr]">

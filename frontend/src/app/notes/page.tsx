@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { getSession } from "@/lib/session";
+import { clearSession, getSession } from "@/lib/session";
 import { fetchSubjects, fetchTopic } from "@/lib/notes-api";
 import type { SubjectSummary, TopicDetail } from "@/lib/notes-api";
 import RuledPaper from "@/components/notes/RuledPaper";
@@ -63,6 +63,11 @@ export default function NotesPage() {
     setTopic(null);
   }
 
+  function handleLogout() {
+    clearSession();
+    router.push("/");
+  }
+
   const activeSubject = subjects?.find((s) => s.id === activeSubjectId) ?? null;
 
   return (
@@ -76,23 +81,23 @@ export default function NotesPage() {
     >
       <header className="flex items-center justify-between px-6 py-5 sm:px-10">
         <Link
-          href="/dashboard"
+          href="/"
           className={`font-serif text-xl font-semibold ${
             activeSubject ? "text-mercury-ink" : "text-[#3a2a1a]"
           }`}
         >
           Notelz
         </Link>
-        <Link
-          href="/dashboard"
+        <button
+          onClick={handleLogout}
           className={`rounded-full border px-4 py-2 text-sm backdrop-blur transition ${
             activeSubject
               ? "border-mercury-ink/30 bg-paper/60 text-mercury-ink hover:bg-paper/85"
               : "border-[#3a2a1a]/30 bg-white/40 text-[#3a2a1a] hover:bg-white/65"
           }`}
         >
-          ← Dashboard
-        </Link>
+          Log out
+        </button>
       </header>
 
       {error && <p className="px-6 text-sm text-red-600 sm:px-10">{error}</p>}

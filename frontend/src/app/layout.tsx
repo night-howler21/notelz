@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Patrick_Hand, Caveat, Inter } from "next/font/google";
+import { Playfair_Display, Patrick_Hand, Caveat, Inter, Rock_Salt } from "next/font/google";
 import "./globals.css";
 import SupportWidget from "@/components/brand/SupportWidget";
 
@@ -28,6 +28,12 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
+const rockSalt = Rock_Salt({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-rock-salt",
+});
+
 export const metadata: Metadata = {
   title: "Notelz — No one tells you what to study at the last minute, so we will.",
   description:
@@ -38,7 +44,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${playfair.variable} ${patrickHand.variable} ${caveat.variable} ${inter.variable} h-full antialiased`}
+      className={`${playfair.variable} ${patrickHand.variable} ${caveat.variable} ${inter.variable} ${rockSalt.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">
         {children}

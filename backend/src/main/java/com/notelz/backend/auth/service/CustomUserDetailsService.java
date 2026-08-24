@@ -14,10 +14,14 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
+    /**
+     * "username" here is really "email or username" — logins and the JWT
+     * subject (always the email) both flow through this one lookup.
+     */
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("No account found for " + email));
+    public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
+        User user = userRepository.findByEmailOrUsername(identifier, identifier)
+                .orElseThrow(() -> new UsernameNotFoundException("No account found for " + identifier));
 
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getEmail())

@@ -25,6 +25,9 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(nullable = false, unique = true)
+    private String username;
+
     @Column(nullable = false)
     private String passwordHash;
 
@@ -35,6 +38,12 @@ public class User {
     @Column(nullable = false)
     @Builder.Default
     private Role role = Role.STUDENT;
+
+    @Column
+    private String resetToken;
+
+    @Column
+    private Instant resetTokenExpiry;
 
     @Column(nullable = false, updatable = false)
     private Instant createdAt;

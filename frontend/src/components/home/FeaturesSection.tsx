@@ -1,70 +1,71 @@
+import {
+  NotesPictorial,
+  VideoPictorial,
+  TutorPictorial,
+  RevisionPictorial,
+  GamesPictorial,
+} from "./FeaturePictorials";
+import { GavelDoodle, QuillDoodle } from "./Doodles";
+
 const FEATURES = [
   {
     title: "Subject Notes",
     description:
       "Notebook-style notes for every subject, organised exactly like you'd write them yourself — ruled pages, hover previews, and all.",
     color: "#A9CBA0",
-    icon: (
-      <path
-        d="M8 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v24a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V6Z M8 26c0 2-2 2-2 4s2 2 2 2 M14 10h12 M14 16h12 M14 22h8"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        fill="none"
-      />
-    ),
+    Pictorial: NotesPictorial,
+    ready: true,
   },
   {
     title: "1-1 Video Sessions",
     description: "Live, one-on-one time with a tutor exactly when you need it most.",
     color: "#A8C8DE",
-    icon: (
-      <path
-        d="M6 10a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V10Z M24 15l8-5v14l-8-5"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinejoin="round"
-        fill="none"
-      />
-    ),
+    Pictorial: VideoPictorial,
+    ready: false,
   },
   {
     title: "Find Tutors",
     description: "Browse and book tutors who know your subject inside out.",
     color: "#E8B4C0",
-    icon: (
-      <path
-        d="M18 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12Z M6 32c0-7 5-11 12-11s12 4 12 11"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-      />
-    ),
+    Pictorial: TutorPictorial,
+    ready: false,
   },
   {
     title: "Last-Minute Revision",
     description:
       "Quick-fire review sessions for when the exam is tomorrow — then Catistor judges how ready you really are.",
     color: "#F0D89A",
-    icon: (
-      <path
-        d="M18 8a10 10 0 1 0 10 10 M18 4v4 M18 12v6l5 3"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-      />
-    ),
+    Pictorial: RevisionPictorial,
+    ready: false,
+  },
+  {
+    title: "Revision Games",
+    description: "Quick games to test yourself, subject by subject or topic by topic.",
+    color: "#D9C6EA",
+    Pictorial: GamesPictorial,
+    ready: false,
   },
 ] as const;
 
+function tornBottomClipPath(teeth = 9) {
+  const points = ["0% 0%", "100% 0%"];
+  for (let i = 0; i <= teeth; i++) {
+    const x = 100 - (i / teeth) * 100;
+    const y = i % 2 === 0 ? 100 : 92;
+    points.push(`${x}% ${y}%`);
+  }
+  return `polygon(${points.join(", ")})`;
+}
+
+const TORN_CLIP = tornBottomClipPath();
+
 export default function FeaturesSection() {
   return (
-    <section id="services" className="px-6 py-24 sm:px-14">
-      <div className="mx-auto max-w-6xl">
+    <section id="services" className="relative overflow-hidden px-6 py-24 sm:px-14">
+      <GavelDoodle className="pointer-events-none absolute right-[5%] top-[6%] hidden h-20 w-20 rotate-12 text-mercury-ink opacity-[0.1] lg:block" />
+      <QuillDoodle className="pointer-events-none absolute left-[4%] bottom-[4%] hidden h-24 w-24 -rotate-6 text-mercury-ink opacity-[0.1] lg:block" />
+
+      <div className="relative mx-auto max-w-6xl">
         <p className="mb-3 text-center text-xs uppercase tracking-[0.35em] text-mercury-ink/60">
           What Notelz gives you
         </p>
@@ -72,22 +73,21 @@ export default function FeaturesSection() {
           Everything you need, all in one notebook.
         </h2>
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {FEATURES.map((feature) => (
+        <div className="flex flex-wrap justify-center gap-x-6 gap-y-10">
+          {FEATURES.map(({ title, description, color, Pictorial, ready }) => (
             <div
-              key={feature.title}
-              className="flex flex-col items-start rounded-2xl border border-mercury-ink/10 bg-paper/70 p-6 shadow-md shadow-mercury-ink/5 backdrop-blur transition hover:-translate-y-1 hover:shadow-lg"
+              key={title}
+              className="relative w-56 pb-6 pt-6 text-center shadow-md shadow-mercury-ink/10 transition hover:-translate-y-1 hover:shadow-lg"
+              style={{ backgroundColor: color, clipPath: TORN_CLIP }}
             >
-              <div
-                className="mb-4 flex h-12 w-12 items-center justify-center rounded-full"
-                style={{ backgroundColor: feature.color }}
-              >
-                <svg viewBox="0 0 36 36" className="h-6 w-6 text-mercury-ink">
-                  {feature.icon}
-                </svg>
-              </div>
-              <h3 className="mb-2 font-serif text-lg text-mercury-ink">{feature.title}</h3>
-              <p className="text-sm leading-relaxed text-ink-soft">{feature.description}</p>
+              {!ready && (
+                <span className="absolute right-3 top-3 rounded-full bg-white/60 px-2 py-0.5 text-[0.6rem] uppercase tracking-wide text-ink/60">
+                  Coming soon
+                </span>
+              )}
+              <Pictorial className="mx-auto mb-3 h-16 w-16 text-ink/80" />
+              <h3 className="mb-2 px-4 font-serif text-lg text-ink">{title}</h3>
+              <p className="px-5 text-sm leading-relaxed text-ink/70">{description}</p>
             </div>
           ))}
         </div>

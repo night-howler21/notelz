@@ -5,6 +5,21 @@ import type { SubjectSummary } from "@/lib/notes-api";
 
 const CHALK_COLORS = ["#EAF3E0", "#F5DFA0", "#B9D8E8", "#F0C2CE", "#D9C6EA"];
 
+function Doodle({ className, children }: { className: string; children: React.ReactNode }) {
+  return (
+    <svg
+      viewBox="0 0 60 60"
+      className={`pointer-events-none absolute stroke-white/25 ${className}`}
+      fill="none"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {children}
+    </svg>
+  );
+}
+
 export default function ChalkboardMenu({
   subjects,
   onSelect,
@@ -22,7 +37,7 @@ export default function ChalkboardMenu({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="relative w-full max-w-2xl rounded-md p-10 sm:p-16"
+        className="relative w-full max-w-2xl overflow-hidden rounded-md p-10 sm:p-16"
         style={{
           background: "#2F3B2C",
           border: "16px solid #6B4A35",
@@ -37,25 +52,44 @@ export default function ChalkboardMenu({
           }}
         />
 
-        <p className="mb-2 text-center font-caveat text-2xl text-white/60">Today&apos;s subjects</p>
-        <h2 className="mb-12 text-center font-caveat text-5xl text-white">Pick one to dig in</h2>
+        {/* chalk doodles, scattered and faint */}
+        <Doodle className="left-4 top-4 h-10 w-10 -rotate-6">
+          <path d="M30 8 L34 22 L48 22 L37 30 L41 44 L30 35 L19 44 L23 30 L12 22 L26 22 Z" />
+        </Doodle>
+        <Doodle className="right-6 top-6 h-9 w-9 rotate-12">
+          <circle cx="30" cy="24" r="14" />
+          <path d="M24 40 h12 M26 46 h8" />
+          <path d="M30 4 v4 M12 12 l3 3 M48 12 l-3 3" />
+        </Doodle>
+        <Doodle className="bottom-6 left-6 h-10 w-14 -rotate-3">
+          <path d="M6 44 C10 20, 20 14, 30 24 C40 34, 50 28, 54 10" />
+        </Doodle>
+        <Doodle className="bottom-8 right-8 h-9 w-9 rotate-6">
+          <path d="M10 34 Q10 14 30 14 Q50 14 50 30" />
+          <path d="M10 34 L10 20 M50 30 L50 44" />
+        </Doodle>
 
-        <div className="flex flex-col items-center gap-8">
+        <p className="mb-1 text-center font-hand text-sm text-white/25">Today&apos;s subjects</p>
+        <p className="mb-10 text-center font-hand text-xs text-white/20">
+          pick one to dig in
+        </p>
+
+        <div className="relative flex flex-col items-center gap-8">
           {subjects.map((subject, i) => (
             <button
               key={subject.id}
               onClick={() => onSelect(subject.id)}
-              className="font-caveat text-5xl transition hover:scale-105"
+              className="font-chalk text-3xl transition hover:scale-105 sm:text-4xl"
               style={{
                 color: CHALK_COLORS[i % CHALK_COLORS.length],
-                textShadow: "0 0 8px rgba(255,255,255,0.15)",
+                textShadow: "0 0 6px rgba(255,255,255,0.2)",
               }}
             >
               {subject.name}
             </button>
           ))}
 
-          <p className="mt-2 font-caveat text-2xl text-white/40">··· more subjects soon</p>
+          <p className="mt-2 font-hand text-xl text-white/30">··· more subjects soon</p>
         </div>
       </motion.div>
 

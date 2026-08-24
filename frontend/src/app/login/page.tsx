@@ -24,7 +24,7 @@ function randomOops() {
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -39,9 +39,9 @@ export default function LoginPage() {
     setError(null);
     setLoading(true);
     try {
-      const session = await login({ email, password });
+      const session = await login({ identifier, password });
       saveSession(session);
-      router.push("/dashboard");
+      router.push("/notes");
     } catch {
       setError(randomOops());
     } finally {
@@ -65,7 +65,7 @@ export default function LoginPage() {
       {existingSession && (
         <div className="mb-5 rounded-xl border border-mercury-ink/15 bg-mercury/25 px-4 py-3 text-sm text-mercury-ink">
           You&apos;re already signed in as <strong>{existingSession.displayName}</strong>.{" "}
-          <Link href="/dashboard" className="font-medium underline underline-offset-2">
+          <Link href="/notes" className="font-medium underline underline-offset-2">
             Go to your notebook →
           </Link>
           <div className="mt-1 text-xs text-mercury-ink/70">
@@ -76,24 +76,29 @@ export default function LoginPage() {
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="email" className="text-xs font-medium uppercase tracking-wide text-ink-soft">
-            Email
+          <label htmlFor="identifier" className="text-xs font-medium uppercase tracking-wide text-ink-soft">
+            Email or Username
           </label>
           <input
-            id="email"
-            type="email"
+            id="identifier"
+            type="text"
             required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={identifier}
+            onChange={(e) => setIdentifier(e.target.value)}
             className={inputClasses}
-            placeholder="you@example.com"
+            placeholder="you@example.com or username"
           />
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="password" className="text-xs font-medium uppercase tracking-wide text-ink-soft">
-            Password
-          </label>
+          <div className="flex items-center justify-between">
+            <label htmlFor="password" className="text-xs font-medium uppercase tracking-wide text-ink-soft">
+              Password
+            </label>
+            <Link href="/forgot-password" className="text-xs font-medium text-mercury-ink underline underline-offset-2">
+              Forgot password?
+            </Link>
+          </div>
           <input
             id="password"
             type="password"
