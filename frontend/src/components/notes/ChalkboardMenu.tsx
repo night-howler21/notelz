@@ -4,33 +4,17 @@ import { motion } from "framer-motion";
 import type { SubjectSummary } from "@/lib/notes-api";
 
 const CHALK_COLORS = ["#EAF3E0", "#F5DFA0", "#B9D8E8", "#F0C2CE", "#D9C6EA"];
+const UNDERLINE_STYLES: React.CSSProperties["textDecorationStyle"][] = [
+  "solid",
+  "wavy",
+  "dotted",
+  "wavy",
+  "solid",
+];
 
-function Doodle({ className, children }: { className: string; children: React.ReactNode }) {
-  return (
-    <svg
-      viewBox="0 0 60 60"
-      className={`pointer-events-none absolute stroke-white/25 ${className}`}
-      fill="none"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      {children}
-    </svg>
-  );
-}
-
-function SubjectIcon({
-  index,
-  className,
-  style,
-}: {
-  index: number;
-  className: string;
-  style?: React.CSSProperties;
-}) {
+function SubjectIcon({ index, className, style }: { index: number; className: string; style?: React.CSSProperties }) {
   const shapes = [
-    // scales
+    // scales — Constitutional Law
     <g key="scales">
       <path d="M30 6 V38" />
       <path d="M12 14 H48" />
@@ -38,24 +22,26 @@ function SubjectIcon({
       <path d="M48 14 L40 28 Q48 34 56 28 Z" />
       <path d="M22 44 H38" />
     </g>,
-    // gavel
+    // gavel — Torts
     <g key="gavel">
       <rect x="8" y="8" width="20" height="10" rx="1.5" transform="rotate(-35 18 13)" />
       <path d="M26 22 L40 36" />
       <path d="M40 36 L54 50" />
       <path d="M8 54 H36" />
     </g>,
-    // book
-    <g key="book">
-      <path d="M30 14 C22 8, 10 8, 4 12 V46 C10 42, 22 42, 30 48" />
-      <path d="M30 14 C38 8, 50 8, 56 12 V46 C50 42, 38 42, 30 48" />
-      <path d="M30 14 V48" />
+    // document + pen — Contract Law
+    <g key="contract">
+      <rect x="8" y="6" width="32" height="42" rx="2" />
+      <path d="M15 18 H33 M15 26 H33 M15 34 H26" />
+      <path d="M52 14 L38 28 L35 38 L45 35 L59 21 Z" />
     </g>,
-    // quill
-    <g key="quill">
-      <path d="M50 6 C24 12, 10 34, 8 54" />
-      <path d="M50 6 C44 14, 32 18, 26 28" />
-      <path d="M8 54 L16 44" />
+    // family / heart — Family Law
+    <g key="family">
+      <circle cx="18" cy="16" r="7" />
+      <path d="M6 40 C6 28, 30 28, 30 40" />
+      <circle cx="38" cy="20" r="5.5" />
+      <path d="M28 40 C28 32, 48 32, 48 40" />
+      <path d="M44 8 C44 4, 50 4, 50 8 C50 4, 56 4, 56 8 C56 13, 50 17, 50 17 C50 17, 44 13, 44 8 Z" />
     </g>,
   ];
 
@@ -75,18 +61,21 @@ function SubjectIcon({
   );
 }
 
-function BackdropDoodle({ className, children }: { className: string; children: React.ReactNode }) {
+function HangingLamp() {
   return (
-    <svg
-      viewBox="0 0 60 60"
-      className={`pointer-events-none absolute stroke-[#6B4A35]/25 ${className}`}
-      fill="none"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      {children}
-    </svg>
+    <div className="pointer-events-none absolute left-1/2 top-0 z-10 -translate-x-1/2">
+      <div className="mx-auto h-10 w-0.5 bg-[#1a1512]" />
+      <div
+        className="h-6 w-16 rounded-b-full"
+        style={{ background: "linear-gradient(to bottom, #1a1512, #2b2118)" }}
+      />
+      <div
+        className="absolute left-1/2 top-14 h-64 w-96 -translate-x-1/2 rounded-full"
+        style={{
+          background: "radial-gradient(ellipse at center, rgba(255,224,160,0.22) 0%, transparent 70%)",
+        }}
+      />
+    </div>
   );
 }
 
@@ -99,44 +88,27 @@ export default function ChalkboardMenu({
 }) {
   return (
     <div
-      className="relative flex min-h-[calc(100vh-96px)] flex-col items-center justify-center overflow-hidden px-4 py-16"
-      style={{ background: "linear-gradient(to bottom, #E8DCC5 0%, #D8C6A3 100%)" }}
+      className="relative flex min-h-[calc(100vh-64px)] flex-col items-center justify-center overflow-hidden px-4 py-16 sm:px-10"
+      style={{
+        backgroundColor: "#4a3128",
+        backgroundImage: [
+          "repeating-linear-gradient(0deg, rgba(0,0,0,0.28) 0px, rgba(0,0,0,0.28) 2px, transparent 2px, transparent 30px)",
+          "repeating-linear-gradient(90deg, rgba(0,0,0,0.22) 0px, rgba(0,0,0,0.22) 2px, transparent 2px, transparent 58px)",
+          "linear-gradient(#5a3d30, #4a3128)",
+        ].join(", "),
+      }}
     >
-      {/* scribbles on the beige backdrop */}
-      <BackdropDoodle className="left-[6%] top-[8%] h-14 w-14 -rotate-12">
-        {/* paper plane */}
-        <path d="M6 30 L54 8 L34 54 L28 34 L6 30 Z" />
-        <path d="M28 34 L54 8" />
-      </BackdropDoodle>
-      <BackdropDoodle className="right-[8%] top-[14%] h-12 w-12 rotate-6">
-        {/* lightbulb / idea */}
-        <circle cx="30" cy="24" r="14" />
-        <path d="M24 40 h12 M26 46 h8" />
-        <path d="M30 4 v4 M10 10 l3 3 M50 10 l-3 3 M6 24 h4 M50 24 h4" />
-      </BackdropDoodle>
-      <BackdropDoodle className="left-[10%] bottom-[10%] h-10 w-10 rotate-3">
-        {/* star */}
-        <path d="M30 6 L36 24 L54 24 L39 35 L45 53 L30 42 L15 53 L21 35 L6 24 L24 24 Z" />
-      </BackdropDoodle>
-      <BackdropDoodle className="right-[6%] bottom-[16%] h-9 w-9 -rotate-6">
-        {/* small star */}
-        <path d="M30 10 L34 24 L48 24 L37 33 L41 47 L30 39 L19 47 L23 33 L12 24 L26 24 Z" />
-      </BackdropDoodle>
-      <BackdropDoodle className="left-[3%] top-[45%] hidden h-11 w-11 rotate-12 md:block">
-        {/* paper plane, smaller */}
-        <path d="M8 26 L52 10 L32 50 L27 32 L8 26 Z" />
-      </BackdropDoodle>
+      <HangingLamp />
 
-      {/* the sign */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="relative w-full max-w-2xl overflow-hidden rounded-md p-10 sm:p-16"
+        className="relative z-0 w-full max-w-2xl overflow-hidden rounded-md p-8 sm:p-12"
         style={{
-          background: "#2F3B2C",
-          border: "16px solid #6B4A35",
-          boxShadow: "0 30px 50px rgba(35,22,12,0.4)",
+          background: "#242b21",
+          border: "14px solid #6B4A35",
+          boxShadow: "0 30px 60px rgba(0,0,0,0.5)",
         }}
       >
         <div
@@ -147,73 +119,46 @@ export default function ChalkboardMenu({
           }}
         />
 
-        {/* chalk doodles, scattered and faint */}
-        <Doodle className="left-4 top-4 h-10 w-10 -rotate-6">
-          <path d="M30 8 L34 22 L48 22 L37 30 L41 44 L30 35 L19 44 L23 30 L12 22 L26 22 Z" />
-        </Doodle>
-        <Doodle className="right-6 top-6 h-9 w-9 rotate-12">
-          <circle cx="30" cy="24" r="14" />
-          <path d="M24 40 h12 M26 46 h8" />
-          <path d="M30 4 v4 M12 12 l3 3 M48 12 l-3 3" />
-        </Doodle>
-        <Doodle className="bottom-6 left-6 h-10 w-14 -rotate-3">
-          <path d="M6 44 C10 20, 20 14, 30 24 C40 34, 50 28, 54 10" />
-        </Doodle>
-        <Doodle className="bottom-8 right-8 h-9 w-9 rotate-6">
-          <path d="M10 34 Q10 14 30 14 Q50 14 50 30" />
-          <path d="M10 34 L10 20 M50 30 L50 44" />
-        </Doodle>
+        <div className="relative mb-3 flex items-center justify-center gap-3">
+          <span className="font-hand text-2xl text-white/50">✦</span>
+          <h2
+            className="text-center font-sans text-4xl font-extrabold uppercase tracking-wide text-white sm:text-5xl"
+            style={{ textShadow: "0 0 8px rgba(255,255,255,0.15)" }}
+          >
+            Your Notebooks
+          </h2>
+          <span className="font-hand text-2xl text-white/50">✦</span>
+        </div>
+        <div className="mx-auto mb-10 h-0.5 w-40 rounded-full bg-white/25" />
 
-        <h2
-          className="relative mb-10 text-center font-sans text-4xl font-extrabold uppercase tracking-wide text-white sm:text-5xl"
-          style={{ textShadow: "3px 3px 0 rgba(0,0,0,0.25)" }}
-        >
-          Your Notebooks
-        </h2>
-
-        <div className="relative mx-auto flex max-w-md flex-col gap-5">
-          {subjects.map((subject, i) => (
-            <button
-              key={subject.id}
-              onClick={() => onSelect(subject.id)}
-              className="flex items-center gap-3 text-left transition hover:translate-x-1"
-            >
-              <SubjectIcon
-                index={i}
-                className="h-7 w-7 shrink-0"
-                style={{ color: CHALK_COLORS[i % CHALK_COLORS.length] }}
-              />
-              <span
-                className="font-chalk text-2xl sm:text-3xl"
-                style={{
-                  color: CHALK_COLORS[i % CHALK_COLORS.length],
-                  textShadow: "0 0 6px rgba(255,255,255,0.2)",
-                }}
+        <div className="relative mx-auto flex max-w-md flex-col gap-6">
+          {subjects.map((subject, i) => {
+            const color = CHALK_COLORS[i % CHALK_COLORS.length];
+            return (
+              <button
+                key={subject.id}
+                onClick={() => onSelect(subject.id)}
+                className="flex items-center gap-4 text-left transition hover:translate-x-1"
               >
-                {subject.name}
-              </span>
-            </button>
-          ))}
-
-          <p className="mt-2 pl-10 font-hand text-lg text-white/30">··· more subjects soon</p>
+                <SubjectIcon index={i} className="h-8 w-8 shrink-0" style={{ color }} />
+                <span
+                  className="font-chalk text-2xl sm:text-3xl"
+                  style={{
+                    color,
+                    textShadow: "0 0 6px rgba(255,255,255,0.15)",
+                    textDecorationLine: "underline",
+                    textDecorationStyle: UNDERLINE_STYLES[i % UNDERLINE_STYLES.length],
+                    textDecorationColor: `${color}99`,
+                    textUnderlineOffset: "6px",
+                  }}
+                >
+                  {subject.name}
+                </span>
+              </button>
+            );
+          })}
         </div>
       </motion.div>
-
-      {/* A-frame easel legs */}
-      <div className="relative h-20 w-full max-w-2xl" aria-hidden="true">
-        <div
-          className="absolute left-[18%] top-0 h-20 w-4 origin-top rounded-b-sm"
-          style={{ background: "#6B4A35", transform: "rotate(10deg)" }}
-        />
-        <div
-          className="absolute right-[18%] top-0 h-20 w-4 origin-top rounded-b-sm"
-          style={{ background: "#6B4A35", transform: "rotate(-10deg)" }}
-        />
-        <div
-          className="absolute left-1/2 top-10 h-2 w-40 -translate-x-1/2 rounded-full"
-          style={{ background: "#5a3d29" }}
-        />
-      </div>
     </div>
   );
 }
