@@ -14,7 +14,8 @@
   --color-gold: #b79a5d;
 
   --font-serif: var(--font-playfair), Georgia, serif;
-  --font-script: var(--font-cormorant), Georgia, serif;
+  --font-hand: var(--font-patrick-hand), "Comic Sans MS", cursive;
+  --font-caveat: var(--font-caveat), "Comic Sans MS", cursive;
   --font-sans: var(--font-inter), Arial, sans-serif;
 }
 
