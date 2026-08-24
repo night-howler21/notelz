@@ -63,14 +63,7 @@ const FEATURES = [
 
 export default function FeaturesSection() {
   return (
-    <section
-      id="services"
-      className="px-6 py-24 sm:px-14"
-      style={{
-        background:
-          "radial-gradient(120% 120% at 80% 100%, #EAF3E5 0%, #D2E6CB 45%, #B4D3AB 100%)",
-      }}
-    >
+    <section id="services" className="px-6 py-24 sm:px-14">
       <div className="mx-auto max-w-6xl">
         <p className="mb-3 text-center text-xs uppercase tracking-[0.35em] text-mercury-ink/60">
           What Notelz gives you

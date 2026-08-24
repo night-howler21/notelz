@@ -7,7 +7,12 @@ import SiteFooter from "@/components/home/SiteFooter";
 export default function Home() {
   return (
     <>
-      <main>
+      <main
+        style={{
+          background:
+            "linear-gradient(to bottom, #EAF3E5 0%, #CDE3C4 16%, #E7EBD8 32%, #F6F1E7 46%, #F6F1E7 56%, #DCEAD3 70%, #C9DFC0 84%, #EAF3E5 100%)",
+        }}
+      >
         <CoverPage />
         <AboutSection />
         <FeaturesSection />

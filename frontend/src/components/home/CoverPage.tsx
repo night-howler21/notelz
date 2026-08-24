@@ -30,13 +30,7 @@ function MercuryEmblem() {
 
 export default function CoverPage() {
   return (
-    <div
-      className="relative flex min-h-screen flex-col overflow-hidden px-6 py-10 sm:px-14"
-      style={{
-        background:
-          "radial-gradient(120% 120% at 20% 0%, #EAF3E5 0%, #D2E6CB 45%, #B4D3AB 100%)",
-      }}
-    >
+    <div className="relative flex min-h-screen flex-col overflow-hidden px-6 py-10 sm:px-14">
       {/* decorative pastel blobs */}
       <span
         aria-hidden="true"

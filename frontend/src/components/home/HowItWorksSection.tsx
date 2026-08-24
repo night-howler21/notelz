@@ -18,7 +18,7 @@ const STEPS = [
 
 export default function HowItWorksSection() {
   return (
-    <section className="bg-paper px-6 py-24 sm:px-14">
+    <section className="px-6 py-24 sm:px-14">
       <div className="mx-auto max-w-5xl">
         <p className="mb-3 text-center text-xs uppercase tracking-[0.35em] text-mercury-ink/60">
           How it works
