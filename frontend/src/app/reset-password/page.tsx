@@ -50,7 +50,9 @@ function ResetPasswordForm() {
           </label>
           <input
             id="newPassword"
+            name="new-password"
             type="password"
+            autoComplete="new-password"
             required
             minLength={8}
             value={newPassword}

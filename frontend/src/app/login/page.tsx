@@ -81,7 +81,9 @@ export default function LoginPage() {
           </label>
           <input
             id="identifier"
+            name="username"
             type="text"
+            autoComplete="username"
             required
             value={identifier}
             onChange={(e) => setIdentifier(e.target.value)}
@@ -101,7 +103,9 @@ export default function LoginPage() {
           </div>
           <input
             id="password"
+            name="password"
             type="password"
+            autoComplete="current-password"
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
