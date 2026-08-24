@@ -151,14 +151,14 @@ export default function NotesPage() {
               </div>
 
               {/* the notebook itself — only this part gets the ruled-paper treatment */}
-              <RuledPaper className="overflow-hidden rounded-2xl border border-mercury-ink/10 shadow-xl shadow-mercury-ink/10">
+              <RuledPaper className="mx-auto max-w-5xl overflow-hidden rounded-2xl border border-mercury-ink/10 shadow-xl shadow-mercury-ink/10">
                 {activeSubject.topics.length === 0 ? (
                   <p className="py-16 text-center font-hand text-xl text-ink-soft">
                     No notes here yet — this subject is still being written.
                   </p>
                 ) : (
-                  <div className="flex flex-col gap-10 p-8 sm:p-10 lg:flex-row lg:items-start">
-                    <aside className="shrink-0 lg:w-80">
+                  <div className="flex flex-col gap-8 p-6 sm:p-8 lg:flex-row lg:items-start">
+                    <aside className="shrink-0 lg:w-72">
                       <TopicList
                         topics={activeSubject.topics}
                         activeTopicId={topic?.id ?? null}
@@ -166,9 +166,9 @@ export default function NotesPage() {
                       />
                     </aside>
 
-                    <div className="min-h-[50vh] flex-1">
+                    <div className="flex-1">
                       {!topic && (
-                        <p className="px-4 pt-16 text-center font-hand text-xl text-ink-soft">
+                        <p className="px-4 pt-8 text-center font-hand text-xl text-ink-soft">
                           Pick a topic on the left to start reading.
                         </p>
                       )}
