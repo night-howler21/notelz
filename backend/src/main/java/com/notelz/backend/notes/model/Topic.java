@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "topics")
 @Getter
@@ -24,6 +27,10 @@ public class Topic {
     @JoinColumn(name = "subject_id", nullable = false)
     private Subject subject;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_topic_id")
+    private Topic parentTopic;
+
     @Column(nullable = false)
     private String title;
 
@@ -36,4 +43,10 @@ public class Topic {
     @Lob
     @Column(nullable = false)
     private String content;
+
+    @ElementCollection
+    @CollectionTable(name = "topic_related_ids", joinColumns = @JoinColumn(name = "topic_id"))
+    @Column(name = "related_topic_id")
+    @Builder.Default
+    private List<Long> relatedTopicIds = new ArrayList<>();
 }

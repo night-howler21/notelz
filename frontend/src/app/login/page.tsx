@@ -1,14 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import AuthShell from "@/components/auth/AuthShell";
 import { login } from "@/lib/api";
-import { saveSession } from "@/lib/session";
+import type { AuthResponse } from "@/lib/api";
+import { getSession, saveSession } from "@/lib/session";
 
 const inputClasses =
   "w-full rounded-xl border border-mercury-ink/20 bg-white/70 px-4 py-2.5 text-sm text-ink outline-none transition focus:border-mercury-ink/50 focus:ring-2 focus:ring-mercury-ink/15";
+
+const OOPS_MESSAGES = [
+  "Oops — that combo doesn't ring a bell. Give it another go?",
+  "Hmm, that didn't match anything in your notebook. Try again?",
+  "Not quite! Even your notes look a little puzzled.",
+  "That one's a miss — double-check and give it another shot.",
+];
+
+function randomOops() {
+  return OOPS_MESSAGES[Math.floor(Math.random() * OOPS_MESSAGES.length)];
+}
 
 export default function LoginPage() {
   const router = useRouter();
@@ -16,6 +28,11 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [existingSession, setExistingSession] = useState<AuthResponse | null>(null);
+
+  useEffect(() => {
+    setExistingSession(getSession());
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -25,8 +42,8 @@ export default function LoginPage() {
       const session = await login({ email, password });
       saveSession(session);
       router.push("/dashboard");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Invalid email or password.");
+    } catch {
+      setError(randomOops());
     } finally {
       setLoading(false);
     }
@@ -45,6 +62,18 @@ export default function LoginPage() {
         </>
       }
     >
+      {existingSession && (
+        <div className="mb-5 rounded-xl border border-mercury-ink/15 bg-mercury/25 px-4 py-3 text-sm text-mercury-ink">
+          You&apos;re already signed in as <strong>{existingSession.displayName}</strong>.{" "}
+          <Link href="/dashboard" className="font-medium underline underline-offset-2">
+            Go to your notebook →
+          </Link>
+          <div className="mt-1 text-xs text-mercury-ink/70">
+            Or log in as someone else below.
+          </div>
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="flex flex-col gap-1.5">
           <label htmlFor="email" className="text-xs font-medium uppercase tracking-wide text-ink-soft">
@@ -76,7 +105,12 @@ export default function LoginPage() {
           />
         </div>
 
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && (
+          <div className="flex items-start gap-2 rounded-xl bg-peach/30 px-4 py-2.5 text-sm text-mercury-ink">
+            <span aria-hidden="true">🐾</span>
+            <span>{error}</span>
+          </div>
+        )}
 
         <button
           type="submit"

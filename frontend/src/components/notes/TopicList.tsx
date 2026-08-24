@@ -3,55 +3,86 @@
 import { useState } from "react";
 import type { TopicSummary } from "@/lib/notes-api";
 
-export default function TopicList({
-  subjectName,
-  topics,
+function TopicNode({
+  topic,
+  depth,
+  activeTopicId,
   onOpenTopic,
 }: {
-  subjectName: string;
-  topics: TopicSummary[];
+  topic: TopicSummary;
+  depth: number;
+  activeTopicId: number | null;
   onOpenTopic: (id: number) => void;
 }) {
-  const [hoveredId, setHoveredId] = useState<number | null>(null);
+  const [hovered, setHovered] = useState(false);
+  const isActive = topic.id === activeTopicId;
 
   return (
-    <div className="h-full overflow-y-auto px-8 py-10 sm:px-14">
-      <p className="mb-1 font-hand text-sm uppercase tracking-widest text-mercury-ink/60">
-        {subjectName}
-      </p>
-      <h2 className="mb-8 font-serif text-2xl text-mercury-ink sm:text-3xl">
-        Pick a topic to read
-      </h2>
+    <li
+      className="relative"
+      style={{ marginLeft: depth * 18 }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <button
+        onClick={() => onOpenTopic(topic.id)}
+        className={`w-full rounded-lg px-3 py-2.5 text-left font-hand text-xl transition ${
+          isActive ? "bg-mercury-ink text-paper" : "text-ink hover:bg-mercury/30"
+        }`}
+      >
+        {depth > 0 && <span className="mr-1.5 opacity-50">↳</span>}
+        {topic.title}
+      </button>
 
-      <ul className="flex flex-col gap-1">
-        {topics.map((topic) => (
-          <li
-            key={topic.id}
-            className="relative"
-            onMouseEnter={() => setHoveredId(topic.id)}
-            onMouseLeave={() => setHoveredId((id) => (id === topic.id ? null : id))}
-          >
-            <button
-              onClick={() => onOpenTopic(topic.id)}
-              className="w-full rounded-lg px-3 py-2.5 text-left font-hand text-xl text-ink transition hover:bg-mercury/25"
-            >
-              {topic.title}
-            </button>
+      {hovered && (
+        <div className="pointer-events-none absolute left-[calc(100%+12px)] top-0 z-30 w-96 -rotate-1 rounded-lg border border-mercury-ink/10 bg-[#FFFDF6] p-6 shadow-2xl">
+          <span
+            aria-hidden="true"
+            className="absolute -top-2.5 left-8 h-5 w-12 -rotate-6 rounded-sm bg-peach/70"
+          />
+          <p className="font-caveat text-2xl leading-snug text-ink-soft">
+            {topic.previewSnippet}
+          </p>
+        </div>
+      )}
 
-            {hoveredId === topic.id && (
-              <div className="pointer-events-none absolute left-1/2 top-[calc(100%+4px)] z-20 w-72 -translate-x-1/2 -rotate-2 rounded-md border border-mercury-ink/10 bg-[#FFFDF6] p-4 shadow-xl">
-                <span
-                  aria-hidden="true"
-                  className="absolute -top-2 left-6 h-4 w-9 -rotate-6 rounded-sm bg-peach/70"
-                />
-                <p className="font-caveat text-lg leading-snug text-ink-soft">
-                  {topic.previewSnippet}
-                </p>
-              </div>
-            )}
-          </li>
-        ))}
-      </ul>
-    </div>
+      {topic.subtopics.length > 0 && (
+        <ul className="mt-1 flex flex-col gap-0.5 border-l border-mercury-ink/15 pl-2">
+          {topic.subtopics.map((sub) => (
+            <TopicNode
+              key={sub.id}
+              topic={sub}
+              depth={depth + 1}
+              activeTopicId={activeTopicId}
+              onOpenTopic={onOpenTopic}
+            />
+          ))}
+        </ul>
+      )}
+    </li>
+  );
+}
+
+export default function TopicList({
+  topics,
+  activeTopicId,
+  onOpenTopic,
+}: {
+  topics: TopicSummary[];
+  activeTopicId: number | null;
+  onOpenTopic: (id: number) => void;
+}) {
+  return (
+    <ul className="flex flex-col gap-1">
+      {topics.map((topic) => (
+        <TopicNode
+          key={topic.id}
+          topic={topic}
+          depth={0}
+          activeTopicId={activeTopicId}
+          onOpenTopic={onOpenTopic}
+        />
+      ))}
+    </ul>
   );
 }

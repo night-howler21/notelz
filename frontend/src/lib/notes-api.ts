@@ -4,6 +4,7 @@ export type TopicSummary = {
   id: number;
   title: string;
   previewSnippet: string;
+  subtopics: TopicSummary[];
 };
 
 export type SubjectSummary = {
@@ -19,6 +20,7 @@ export type TopicDetail = {
   content: string;
   subjectId: number;
   subjectName: string;
+  relatedTopics: TopicSummary[];
 };
 
 async function authedGet<T>(path: string, token: string): Promise<T> {

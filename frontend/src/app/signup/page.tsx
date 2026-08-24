@@ -93,7 +93,12 @@ export default function SignupPage() {
           />
         </div>
 
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && (
+          <div className="flex items-start gap-2 rounded-xl bg-peach/30 px-4 py-2.5 text-sm text-mercury-ink">
+            <span aria-hidden="true">🐾</span>
+            <span>{error}</span>
+          </div>
+        )}
 
         <button
           type="submit"

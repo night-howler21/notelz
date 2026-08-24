@@ -46,8 +46,8 @@ export default function CoverPage() {
         className="pointer-events-none absolute bottom-[8%] right-[6%] h-64 w-64 rounded-full bg-peach opacity-30 blur-3xl"
       />
 
-      {/* top bar */}
-      <header className="relative z-10 flex items-start justify-between">
+      {/* top bar: brand, nav, and auth all in one integrated header row */}
+      <header className="relative z-10 grid grid-cols-1 items-center gap-4 lg:grid-cols-[1fr_auto_1fr]">
         <div className="flex flex-col gap-1">
           <div className="font-serif text-2xl font-semibold tracking-wide text-mercury-ink sm:text-3xl">
             Notelz
@@ -57,25 +57,7 @@ export default function CoverPage() {
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <Link
-            href="/login"
-            className="rounded-full border border-mercury-ink/35 bg-paper/55 px-5 py-2.5 text-sm font-medium text-mercury-ink backdrop-blur transition hover:-translate-y-0.5 hover:bg-paper/85"
-          >
-            Log In
-          </Link>
-          <Link
-            href="/signup"
-            className="rounded-full bg-mercury-ink px-5 py-2.5 text-sm font-medium text-paper shadow-lg shadow-mercury-ink/20 transition hover:-translate-y-0.5"
-          >
-            Sign Up
-          </Link>
-        </div>
-      </header>
-
-      {/* centre content */}
-      <main className="relative z-10 flex flex-1 flex-col items-center justify-center py-8 text-center">
-        <nav className="mb-12 rounded-full border border-mercury-ink/25 bg-paper/55 p-1.5 shadow-lg shadow-mercury-ink/10 backdrop-blur">
+        <nav className="justify-self-center rounded-full border border-mercury-ink/25 bg-paper/55 p-1.5 shadow-lg shadow-mercury-ink/10 backdrop-blur">
           <ul className="flex flex-wrap justify-center gap-0">
             {NAV_TABS.map((tab) => (
               <li key={tab}>
@@ -94,6 +76,24 @@ export default function CoverPage() {
           </ul>
         </nav>
 
+        <div className="flex items-center gap-3 justify-self-start lg:justify-self-end">
+          <Link
+            href="/login"
+            className="rounded-full border border-mercury-ink/35 bg-paper/55 px-5 py-2.5 text-sm font-medium text-mercury-ink backdrop-blur transition hover:-translate-y-0.5 hover:bg-paper/85"
+          >
+            Log In
+          </Link>
+          <Link
+            href="/signup"
+            className="rounded-full bg-mercury-ink px-5 py-2.5 text-sm font-medium text-paper shadow-lg shadow-mercury-ink/20 transition hover:-translate-y-0.5"
+          >
+            Sign Up
+          </Link>
+        </div>
+      </header>
+
+      {/* centre content */}
+      <main className="relative z-10 flex flex-1 flex-col items-center justify-center py-8 text-center">
         <MercuryEmblem />
 
         <p className="mb-4 text-xs uppercase tracking-[0.35em] text-mercury-ink/70">

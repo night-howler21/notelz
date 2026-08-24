@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { getSession } from "@/lib/session";
 import { fetchSubjects, fetchTopic } from "@/lib/notes-api";
 import type { SubjectSummary, TopicDetail } from "@/lib/notes-api";
 import RuledPaper from "@/components/notes/RuledPaper";
-import SubjectTabs from "@/components/notes/SubjectTabs";
+import SubjectPicker from "@/components/notes/SubjectPicker";
 import TopicList from "@/components/notes/TopicList";
 import TopicReader from "@/components/notes/TopicReader";
 
@@ -31,21 +31,35 @@ export default function NotesPage() {
   useEffect(() => {
     if (!token) return;
     fetchSubjects(token)
-      .then((data) => {
-        setSubjects(data);
-        setActiveSubjectId((current) => current ?? data[0]?.id ?? null);
-      })
+      .then(setSubjects)
       .catch(() => setError("Couldn't load your notes right now."));
   }, [token]);
 
+  const latestRequestedTopicId = useRef<number | null>(null);
+
   async function openTopic(id: number) {
     if (!token) return;
+    latestRequestedTopicId.current = id;
     try {
       const detail = await fetchTopic(id, token);
-      setTopic(detail);
+      if (latestRequestedTopicId.current === id) {
+        setTopic(detail);
+      }
     } catch {
-      setError("Couldn't load that note right now.");
+      if (latestRequestedTopicId.current === id) {
+        setError("Couldn't load that note right now.");
+      }
     }
+  }
+
+  function openSubject(id: number) {
+    setActiveSubjectId(id);
+    setTopic(null);
+  }
+
+  function backToSubjects() {
+    setActiveSubjectId(null);
+    setTopic(null);
   }
 
   const activeSubject = subjects?.find((s) => s.id === activeSubjectId) ?? null;
@@ -70,41 +84,59 @@ export default function NotesPage() {
         </Link>
       </header>
 
-      <main className="flex flex-col gap-6 px-6 pb-10 sm:px-10 lg:flex-row lg:items-start">
-        {subjects && subjects.length > 0 && (
-          <SubjectTabs
-            subjects={subjects}
-            activeId={activeSubjectId}
-            onSelect={(id) => {
-              setActiveSubjectId(id);
-              setTopic(null);
-            }}
-          />
+      <main className="px-6 pb-14 sm:px-10">
+        {error && <p className="text-sm text-red-600">{error}</p>}
+
+        {!error && !subjects && (
+          <p className="py-16 text-center font-hand text-lg text-ink-soft">
+            Opening your notebook…
+          </p>
         )}
 
-        <RuledPaper className="flex h-[75vh] w-full flex-col overflow-hidden rounded-2xl border border-mercury-ink/10 shadow-xl shadow-mercury-ink/10">
-          {error && <p className="p-8 text-sm text-red-600">{error}</p>}
+        {!error && subjects && subjects.length === 0 && (
+          <p className="py-16 text-center font-hand text-lg text-ink-soft">
+            No subjects yet — check back soon.
+          </p>
+        )}
 
-          {!error && !subjects && (
-            <p className="p-8 font-hand text-lg text-ink-soft">Opening your notebook…</p>
-          )}
+        {!error && subjects && subjects.length > 0 && !activeSubject && (
+          <SubjectPicker subjects={subjects} onSelect={openSubject} />
+        )}
 
-          {!error && subjects && subjects.length === 0 && (
-            <p className="p-8 font-hand text-lg text-ink-soft">
-              No subjects yet — check back soon.
-            </p>
-          )}
+        {!error && activeSubject && (
+          <div>
+            <div className="relative mb-8 flex items-center justify-center">
+              <button
+                onClick={backToSubjects}
+                className="absolute left-0 rounded-full border border-mercury-ink/30 bg-paper/60 px-4 py-2 text-sm text-mercury-ink backdrop-blur transition hover:bg-paper/85"
+              >
+                ← All subjects
+              </button>
+              <h1 className="font-serif text-3xl text-mercury-ink sm:text-4xl">
+                {activeSubject.name}
+              </h1>
+            </div>
 
-          {!error && activeSubject && !topic && (
-            <TopicList
-              subjectName={activeSubject.name}
-              topics={activeSubject.topics}
-              onOpenTopic={openTopic}
-            />
-          )}
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
+              <aside className="shrink-0 lg:w-80">
+                <TopicList
+                  topics={activeSubject.topics}
+                  activeTopicId={topic?.id ?? null}
+                  onOpenTopic={openTopic}
+                />
+              </aside>
 
-          {!error && topic && <TopicReader topic={topic} onBack={() => setTopic(null)} />}
-        </RuledPaper>
+              <RuledPaper className="h-[65vh] flex-1 overflow-hidden rounded-2xl border border-mercury-ink/10 shadow-xl shadow-mercury-ink/10">
+                {!topic && (
+                  <p className="flex h-full items-center justify-center px-8 text-center font-hand text-xl text-ink-soft">
+                    Pick a topic on the left to start reading.
+                  </p>
+                )}
+                {topic && <TopicReader topic={topic} onOpenTopic={openTopic} />}
+              </RuledPaper>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );
