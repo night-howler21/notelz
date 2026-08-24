@@ -37,7 +37,7 @@ cd backend
 ./mvnw.cmd spring-boot:run
 ```
 
-Starts on `http://localhost:8080`. Config lives in `src/main/resources/application.properties`, all overridable via env vars (`DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `JWT_SECRET`, `JWT_EXPIRATION_MS`, `CORS_ALLOWED_ORIGINS`). `spring.jpa.hibernate.ddl-auto=update` auto-creates/updates tables from the JPA entities — fine for dev, swap for migrations (Flyway/Liquibase) before production.
+Starts on `http://localhost:8080` by default (override with the `PORT` env var — local dev here runs it on `8081` since Windows reserves `8080` on this machine; see `backend/dev.cmd`). Config lives in `src/main/resources/application.properties`, all overridable via env vars (`PORT`, `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `JWT_SECRET`, `JWT_EXPIRATION_MS`, `CORS_ALLOWED_ORIGINS`). `spring.jpa.hibernate.ddl-auto=update` auto-creates/updates tables from the JPA entities — fine for dev, swap for migrations (Flyway/Liquibase) before production.
 
 ## Running the frontend
 
