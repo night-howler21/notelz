@@ -1,0 +1,36 @@
+databases:
+  - name: notelz-db
+    plan: free
+
+services:
+  - type: web
+    name: notelz-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    envVars:
+      - key: DB_HOST
+        fromDatabase:
+          name: notelz-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: notelz-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: notelz-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: notelz-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: notelz-db
+          property: password
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ALLOWED_ORIGINS
+        value: http://localhost:3000
