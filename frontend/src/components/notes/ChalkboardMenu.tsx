@@ -20,6 +20,21 @@ function Doodle({ className, children }: { className: string; children: React.Re
   );
 }
 
+function BackdropDoodle({ className, children }: { className: string; children: React.ReactNode }) {
+  return (
+    <svg
+      viewBox="0 0 60 60"
+      className={`pointer-events-none absolute stroke-[#6B4A35]/25 ${className}`}
+      fill="none"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {children}
+    </svg>
+  );
+}
+
 export default function ChalkboardMenu({
   subjects,
   onSelect,
@@ -32,6 +47,31 @@ export default function ChalkboardMenu({
       className="relative flex min-h-[calc(100vh-96px)] flex-col items-center justify-center overflow-hidden px-4 py-16"
       style={{ background: "linear-gradient(to bottom, #E8DCC5 0%, #D8C6A3 100%)" }}
     >
+      {/* scribbles on the beige backdrop */}
+      <BackdropDoodle className="left-[6%] top-[8%] h-14 w-14 -rotate-12">
+        {/* paper plane */}
+        <path d="M6 30 L54 8 L34 54 L28 34 L6 30 Z" />
+        <path d="M28 34 L54 8" />
+      </BackdropDoodle>
+      <BackdropDoodle className="right-[8%] top-[14%] h-12 w-12 rotate-6">
+        {/* lightbulb / idea */}
+        <circle cx="30" cy="24" r="14" />
+        <path d="M24 40 h12 M26 46 h8" />
+        <path d="M30 4 v4 M10 10 l3 3 M50 10 l-3 3 M6 24 h4 M50 24 h4" />
+      </BackdropDoodle>
+      <BackdropDoodle className="left-[10%] bottom-[10%] h-10 w-10 rotate-3">
+        {/* star */}
+        <path d="M30 6 L36 24 L54 24 L39 35 L45 53 L30 42 L15 53 L21 35 L6 24 L24 24 Z" />
+      </BackdropDoodle>
+      <BackdropDoodle className="right-[6%] bottom-[16%] h-9 w-9 -rotate-6">
+        {/* small star */}
+        <path d="M30 10 L34 24 L48 24 L37 33 L41 47 L30 39 L19 47 L23 33 L12 24 L26 24 Z" />
+      </BackdropDoodle>
+      <BackdropDoodle className="left-[3%] top-[45%] hidden h-11 w-11 rotate-12 md:block">
+        {/* paper plane, smaller */}
+        <path d="M8 26 L52 10 L32 50 L27 32 L8 26 Z" />
+      </BackdropDoodle>
+
       {/* the sign */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -69,10 +109,12 @@ export default function ChalkboardMenu({
           <path d="M10 34 L10 20 M50 30 L50 44" />
         </Doodle>
 
-        <p className="mb-1 text-center font-hand text-sm text-white/25">Today&apos;s subjects</p>
-        <p className="mb-10 text-center font-hand text-xs text-white/20">
-          pick one to dig in
-        </p>
+        <h2
+          className="relative mb-10 text-center font-sans text-4xl font-extrabold uppercase tracking-wide text-white sm:text-5xl"
+          style={{ textShadow: "3px 3px 0 rgba(0,0,0,0.25)" }}
+        >
+          Your Notebooks
+        </h2>
 
         <div className="relative flex flex-col items-center gap-8">
           {subjects.map((subject, i) => (
