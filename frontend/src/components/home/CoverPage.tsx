@@ -1,9 +1,12 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
 
-const NAV_TABS = ["About", "Blogs", "Services", "Notifications", "Notes"] as const;
+const NAV_LINKS = [
+  { label: "About", href: "#about" },
+  { label: "Blogs", href: undefined },
+  { label: "Services", href: "#services" },
+  { label: "Notifications", href: undefined },
+  { label: "Notes", href: "#services" },
+] as const;
 
 function MercuryEmblem() {
   return (
@@ -26,8 +29,6 @@ function MercuryEmblem() {
 }
 
 export default function CoverPage() {
-  const [activeTab, setActiveTab] = useState<(typeof NAV_TABS)[number]>("Notes");
-
   return (
     <div
       className="relative flex min-h-screen flex-col overflow-hidden px-6 py-10 sm:px-14"
@@ -46,7 +47,7 @@ export default function CoverPage() {
         className="pointer-events-none absolute bottom-[8%] right-[6%] h-64 w-64 rounded-full bg-peach opacity-30 blur-3xl"
       />
 
-      {/* top bar: brand, nav, and auth all in one integrated header row */}
+      {/* top bar: brand, nav, and auth all embedded in one header row */}
       <header className="relative z-10 grid grid-cols-1 items-center gap-4 lg:grid-cols-[1fr_auto_1fr]">
         <div className="flex flex-col gap-1">
           <div className="font-serif text-2xl font-semibold tracking-wide text-mercury-ink sm:text-3xl">
@@ -57,20 +58,22 @@ export default function CoverPage() {
           </div>
         </div>
 
-        <nav className="justify-self-center rounded-full border border-mercury-ink/25 bg-paper/55 p-1.5 shadow-lg shadow-mercury-ink/10 backdrop-blur">
-          <ul className="flex flex-wrap justify-center gap-0">
-            {NAV_TABS.map((tab) => (
-              <li key={tab}>
-                <button
-                  onClick={() => setActiveTab(tab)}
-                  className={`rounded-full px-4 py-2.5 text-[0.7rem] font-semibold uppercase tracking-[0.09em] transition sm:px-5 ${
-                    activeTab === tab
-                      ? "bg-mercury-ink text-paper"
-                      : "text-mercury-ink hover:bg-mercury-ink/10"
-                  }`}
-                >
-                  {tab}
-                </button>
+        <nav className="justify-self-center">
+          <ul className="flex flex-wrap items-center justify-center gap-6 sm:gap-8">
+            {NAV_LINKS.map(({ label, href }) => (
+              <li key={label}>
+                {href ? (
+                  <a
+                    href={href}
+                    className="text-[0.7rem] font-semibold uppercase tracking-[0.09em] text-mercury-ink/80 transition hover:text-mercury-ink hover:underline hover:underline-offset-4"
+                  >
+                    {label}
+                  </a>
+                ) : (
+                  <span className="text-[0.7rem] font-semibold uppercase tracking-[0.09em] text-mercury-ink/50">
+                    {label}
+                  </span>
+                )}
               </li>
             ))}
           </ul>
@@ -93,7 +96,7 @@ export default function CoverPage() {
       </header>
 
       {/* centre content */}
-      <main className="relative z-10 flex flex-1 flex-col items-center justify-center py-8 text-center">
+      <div className="relative z-10 flex flex-1 flex-col items-center justify-center py-8 text-center">
         <MercuryEmblem />
 
         <p className="mb-4 text-xs uppercase tracking-[0.35em] text-mercury-ink/70">
@@ -117,25 +120,22 @@ export default function CoverPage() {
           >
             Open Your Notebook
           </Link>
-          <Link
-            href="#about"
+          <a
+            href="#services"
             className="rounded-full border border-mercury-ink/35 bg-paper/55 px-8 py-3.5 text-sm font-medium text-mercury-ink backdrop-blur transition hover:-translate-y-0.5 hover:bg-paper/85"
           >
             Explore Notelz
-          </Link>
+          </a>
         </div>
-      </main>
 
-      {/* footer strip */}
-      <footer className="relative z-10 flex items-center justify-between pt-6 text-[0.72rem] tracking-wide text-mercury-ink/70">
-        <span>
-          Notes <span className="mx-2 inline-block h-1 w-1 rounded-full bg-peach align-middle" />
-          Tutors <span className="mx-2 inline-block h-1 w-1 rounded-full bg-peach align-middle" />
-          Revision <span className="mx-2 inline-block h-1 w-1 rounded-full bg-peach align-middle" />
-          Progress
-        </span>
-        <span>&copy; 2026 Notelz</span>
-      </footer>
+        <a
+          href="#about"
+          aria-label="Scroll down"
+          className="absolute bottom-2 left-1/2 hidden -translate-x-1/2 animate-bounce text-mercury-ink/50 sm:block"
+        >
+          ↓
+        </a>
+      </div>
     </div>
   );
 }

@@ -3,11 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { AnimatePresence, motion } from "framer-motion";
 import { getSession } from "@/lib/session";
 import { fetchSubjects, fetchTopic } from "@/lib/notes-api";
 import type { SubjectSummary, TopicDetail } from "@/lib/notes-api";
 import RuledPaper from "@/components/notes/RuledPaper";
-import SubjectPicker from "@/components/notes/SubjectPicker";
+import Corkboard from "@/components/notes/Corkboard";
 import TopicList from "@/components/notes/TopicList";
 import TopicReader from "@/components/notes/TopicReader";
 
@@ -99,43 +100,71 @@ export default function NotesPage() {
           </p>
         )}
 
-        {!error && subjects && subjects.length > 0 && !activeSubject && (
-          <SubjectPicker subjects={subjects} onSelect={openSubject} />
-        )}
-
-        {!error && activeSubject && (
-          <div>
-            <div className="relative mb-8 flex items-center justify-center">
-              <button
-                onClick={backToSubjects}
-                className="absolute left-0 rounded-full border border-mercury-ink/30 bg-paper/60 px-4 py-2 text-sm text-mercury-ink backdrop-blur transition hover:bg-paper/85"
+        {!error && subjects && subjects.length > 0 && (
+          <AnimatePresence mode="wait">
+            {!activeSubject && (
+              <motion.div
+                key="corkboard"
+                initial={{ opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.04 }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
               >
-                ← All subjects
-              </button>
-              <h1 className="font-serif text-3xl text-mercury-ink sm:text-4xl">
-                {activeSubject.name}
-              </h1>
-            </div>
+                <Corkboard subjects={subjects} onSelect={openSubject} />
+              </motion.div>
+            )}
 
-            <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
-              <aside className="shrink-0 lg:w-80">
-                <TopicList
-                  topics={activeSubject.topics}
-                  activeTopicId={topic?.id ?? null}
-                  onOpenTopic={openTopic}
-                />
-              </aside>
+            {activeSubject && (
+              <motion.div
+                key="notebook"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+              >
+                {/* plain site chrome — not part of the notebook */}
+                <div className="relative mb-6 flex items-center justify-center">
+                  <button
+                    onClick={backToSubjects}
+                    className="absolute left-0 rounded-full border border-mercury-ink/30 bg-paper/60 px-4 py-2 text-sm text-mercury-ink backdrop-blur transition hover:bg-paper/85"
+                  >
+                    ← All subjects
+                  </button>
+                  <h1 className="font-serif text-3xl text-mercury-ink sm:text-4xl">
+                    {activeSubject.name}
+                  </h1>
+                </div>
 
-              <RuledPaper className="h-[65vh] flex-1 overflow-hidden rounded-2xl border border-mercury-ink/10 shadow-xl shadow-mercury-ink/10">
-                {!topic && (
-                  <p className="flex h-full items-center justify-center px-8 text-center font-hand text-xl text-ink-soft">
-                    Pick a topic on the left to start reading.
-                  </p>
-                )}
-                {topic && <TopicReader topic={topic} onOpenTopic={openTopic} />}
-              </RuledPaper>
-            </div>
-          </div>
+                {/* the notebook itself — only this part gets the ruled-paper treatment */}
+                <RuledPaper className="overflow-hidden rounded-2xl border border-mercury-ink/10 shadow-xl shadow-mercury-ink/10">
+                  {activeSubject.topics.length === 0 ? (
+                    <p className="py-16 text-center font-hand text-xl text-ink-soft">
+                      No notes here yet — this subject is still being written.
+                    </p>
+                  ) : (
+                    <div className="flex flex-col gap-10 p-8 sm:p-10 lg:flex-row lg:items-start">
+                      <aside className="shrink-0 lg:w-80">
+                        <TopicList
+                          topics={activeSubject.topics}
+                          activeTopicId={topic?.id ?? null}
+                          onOpenTopic={openTopic}
+                        />
+                      </aside>
+
+                      <div className="min-h-[50vh] flex-1">
+                        {!topic && (
+                          <p className="px-4 pt-16 text-center font-hand text-xl text-ink-soft">
+                            Pick a topic on the left to start reading.
+                          </p>
+                        )}
+                        {topic && <TopicReader topic={topic} onOpenTopic={openTopic} />}
+                      </div>
+                    </div>
+                  )}
+                </RuledPaper>
+              </motion.div>
+            )}
+          </AnimatePresence>
         )}
       </main>
     </div>

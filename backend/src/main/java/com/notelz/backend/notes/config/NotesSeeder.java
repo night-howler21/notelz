@@ -142,137 +142,28 @@ public class NotesSeeder implements CommandLineRunner {
         ));
         constitutionalLaw.setTopics(constitutionalLawTopics);
 
-        Subject chemistry = Subject.builder()
-                .name("Organic Chemistry")
-                .colorHex("#EFC6A4")
+        Subject torts = Subject.builder()
+                .name("Torts")
+                .colorHex("#F0D89A")
                 .sortOrder(1)
+                .topics(new ArrayList<>())
                 .build();
-        chemistry.setTopics(List.of(
-                topic(chemistry, 0, "SN1 vs SN2 Reactions",
-                        "One step or two? Substrate, nucleophile, and solvent decide which path a substitution takes.",
-                        """
-                        Nucleophilic substitution reactions come in two flavours, and telling them apart is a staple \
-                        exam question.
 
-                        SN2 is a single, concerted step: the nucleophile attacks the carbon from the side opposite \
-                        the leaving group, flipping the molecule's configuration like an umbrella in the wind \
-                        (Walden inversion). It favours primary substrates, strong nucleophiles, and polar aprotic \
-                        solvents, and the rate depends on the concentration of both the substrate and the \
-                        nucleophile.
-
-                        SN1 happens in two steps: the leaving group departs first, forming a planar carbocation \
-                        intermediate, and the nucleophile attacks afterward — from either face, giving a racemic \
-                        mixture. It favours tertiary substrates (more stable carbocations), weak nucleophiles, and \
-                        polar protic solvents. Its rate depends only on substrate concentration.
-
-                        Quick recall: SN2 = one step, inversion, primary. SN1 = two steps, racemisation, tertiary.
-                        """),
-                topic(chemistry, 1, "Aromaticity",
-                        "Cyclic, planar, fully conjugated, and 4n+2 π electrons — the four conditions every aromatic ring must meet.",
-                        """
-                        A compound is aromatic if it satisfies four conditions simultaneously: it must be cyclic, \
-                        planar, fully conjugated (every ring atom has a p-orbital), and contain 4n+2 π electrons in \
-                        that conjugated system, per Hückel's Rule (n = 0, 1, 2…).
-
-                        Benzene is the textbook case: six π electrons (n=1), a flat hexagonal ring, and continuous \
-                        p-orbital overlap around the whole ring. This delocalisation gives aromatic compounds \
-                        unusual stability compared to what a purely hypothetical, non-delocalised structure would \
-                        have.
-
-                        Compounds that are cyclic and conjugated but have 4n π electrons are anti-aromatic — actively \
-                        destabilised, not just neutral. Cyclobutadiene is the classic example. And anything that \
-                        fails even one condition (non-planar, or broken conjugation) is simply non-aromatic.
-                        """),
-                topic(chemistry, 2, "Stereochemistry Basics",
-                        "Same formula, same connectivity, different arrangement in space — that's the whole idea of a stereoisomer.",
-                        """
-                        Stereoisomers share molecular formula and the same atom-to-atom connectivity, but differ in \
-                        how their atoms are arranged in three-dimensional space.
-
-                        Enantiomers are non-superimposable mirror images of each other — like left and right hands. \
-                        They share identical physical properties except for how they rotate plane-polarised light, \
-                        and except in how they interact with other chiral molecules (which matters enormously in \
-                        biology and drug design).
-
-                        Diastereomers are stereoisomers that are not mirror images of one another. Unlike \
-                        enantiomers, they can have genuinely different physical properties — different melting \
-                        points, boiling points, solubility — which makes them separable by ordinary means.
-
-                        A carbon with four different substituents is a stereocentre. The R/S system (Cahn-Ingold- \
-                        Prelog priority rules) names the configuration at each one: rank the substituents by \
-                        priority, orient the lowest-priority group away from you, and read the remaining three — \
-                        clockwise is R, counterclockwise is S.
-                        """)
-        ));
-
-        Subject worldHistory = Subject.builder()
-                .name("World History")
-                .colorHex("#C7BEDD")
+        Subject contractLaw = Subject.builder()
+                .name("Contract Law")
+                .colorHex("#A8C8DE")
                 .sortOrder(2)
+                .topics(new ArrayList<>())
                 .build();
-        worldHistory.setTopics(List.of(
-                topic(worldHistory, 0, "Treaty of Westphalia",
-                        "The 1648 settlement that ended decades of war — and quietly invented the modern idea of the sovereign state.",
-                        """
-                        Signed in 1648, the Peace of Westphalia ended the Thirty Years' War in the Holy Roman Empire \
-                        and the Eighty Years' War between Spain and the Dutch Republic. It's remembered less for the \
-                        wars it ended and more for the political idea it left behind.
 
-                        Westphalia is widely credited as the origin of the modern state system: it established the \
-                        principle that each state holds sovereignty over its own territory and domestic affairs, \
-                        free from outside interference — including from the Pope or the Holy Roman Emperor, who had \
-                        both previously claimed authority above individual rulers.
+        Subject familyLaw = Subject.builder()
+                .name("Family Law")
+                .colorHex("#E8B4C0")
+                .sortOrder(3)
+                .topics(new ArrayList<>())
+                .build();
 
-                        This "Westphalian sovereignty" became the baseline assumption of international relations for \
-                        centuries afterward, and it's still the reference point today whenever people discuss \
-                        state sovereignty, non-intervention, or the legitimacy of international bodies overriding \
-                        domestic governments.
-                        """),
-                topic(worldHistory, 1, "Causes of WWI",
-                        "MAIN: Militarism, Alliances, Imperialism, Nationalism — four long fuses lit by one assassination.",
-                        """
-                        World War I's causes are commonly grouped under the acronym MAIN: Militarism, Alliances, \
-                        Imperialism, and Nationalism.
-
-                        Militarism describes the arms race among major European powers, especially the naval \
-                        rivalry between Britain and Germany, which built up both the capacity and the institutional \
-                        appetite for war.
-
-                        The alliance system — the Triple Entente (Britain, France, Russia) versus the Triple \
-                        Alliance (Germany, Austria-Hungary, Italy) — meant that a conflict between any two members \
-                        risked dragging in every other signatory.
-
-                        Imperial competition for colonies and resources bred deep distrust between the powers, while \
-                        rising nationalism — especially in the Balkans, the "powder keg of Europe" — created the \
-                        volatile local tensions that needed only a spark.
-
-                        That spark came on 28 June 1914: the assassination of Archduke Franz Ferdinand of \
-                        Austria-Hungary by a Bosnian Serb nationalist in Sarajevo. Within weeks, the alliance system \
-                        turned one regional crisis into a continental war.
-                        """),
-                topic(worldHistory, 2, "The Cold War: An Overview",
-                        "No direct battles between the two superpowers — just fifty years of proxy wars, arms races, and ideology.",
-                        """
-                        The Cold War (roughly 1947–1991) was a prolonged geopolitical standoff between the United \
-                        States and the Soviet Union, defined by ideological conflict — capitalism and liberal \
-                        democracy against communism — rather than direct military confrontation between the two \
-                        superpowers themselves.
-
-                        Instead, the rivalry played out through proxy wars (Korea, Vietnam, Afghanistan), a nuclear \
-                        arms race underpinned by the doctrine of Mutually Assured Destruction, and a global contest \
-                        for influence, as both sides courted newly independent nations across Asia, Africa, and \
-                        Latin America.
-
-                        Key flashpoints include the Berlin Blockade (1948-49), the Cuban Missile Crisis (1962) — the \
-                        closest the world came to full nuclear war — and the eventual fall of the Berlin Wall in \
-                        1989, which symbolically marked the beginning of the end.
-
-                        The Soviet Union's dissolution in 1991 formally closed the Cold War, leaving the United \
-                        States as the world's sole superpower for the following decade.
-                        """)
-        ));
-
-        subjectRepository.saveAll(List.of(constitutionalLaw, chemistry, worldHistory));
+        subjectRepository.saveAll(List.of(constitutionalLaw, torts, contractLaw, familyLaw));
 
         // second pass: wire up cross-references now that topics have generated IDs
         doctrineOfEclipse.setRelatedTopicIds(List.of(doctrineOfSeverability.getId(), basicStructure.getId()));

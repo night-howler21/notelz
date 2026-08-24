@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Patrick_Hand, Caveat, Inter } from "next/font/google";
 import "./globals.css";
+import SupportWidget from "@/components/brand/SupportWidget";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -39,7 +40,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${playfair.variable} ${patrickHand.variable} ${caveat.variable} ${inter.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans">{children}</body>
+      <body className="min-h-full flex flex-col font-sans">
+        {children}
+        <SupportWidget />
+      </body>
     </html>
   );
 }
