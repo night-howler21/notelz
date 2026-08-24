@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "notelz-prototype",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8080", "--directory", "prototype"],
+      "port": 8080
+    },
+    {
+      "name": "notelz-frontend",
+      "runtimeExecutable": "C:\\Users\\Home\\Documents\\Notelz\\frontend\\dev.cmd",
+      "runtimeArgs": [],
+      "port": 3000
+    }
+  ]
+}
