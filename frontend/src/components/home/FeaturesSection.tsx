@@ -1,9 +1,4 @@
-import {
-  NotesPictorial,
-  VideoPictorial,
-  TutorPictorial,
-  RevisionPictorial,
-} from "./FeaturePictorials";
+import { NotesPictorial, VideoPictorial, TutorPictorial, RevisionPictorial } from "./FeaturePictorials";
 import { GavelDoodle, QuillDoodle } from "./Doodles";
 import NotepadBanner from "@/components/shared/NotepadBanner";
 
@@ -13,30 +8,28 @@ const FEATURES = [
     description:
       "Notebook-style notes for every subject, organised exactly like you'd write them yourself.",
     Pictorial: NotesPictorial,
+    pin: "red",
     ready: true,
   },
   {
     title: "1-1 Video Sessions",
     description: "Live, one-on-one time with a tutor exactly when you need it most.",
     Pictorial: VideoPictorial,
+    pin: "blue",
     ready: false,
   },
   {
     title: "Find Tutors",
     description: "Browse and book tutors who know your subject inside out.",
     Pictorial: TutorPictorial,
+    pin: "green",
     ready: false,
   },
   {
     title: "Last-Minute Revision",
     description: "Quick-fire review sessions for when the exam is tomorrow.",
     Pictorial: RevisionPictorial,
-    ready: false,
-  },
-  {
-    title: "Revision Games",
-    description: "Quick games to test yourself, subject by subject or topic by topic.",
-    Pictorial: null,
+    pin: "yellow",
     ready: false,
   },
 ] as const;
@@ -56,18 +49,16 @@ export default function FeaturesSection() {
         </h2>
 
         <div className="flex flex-wrap justify-center gap-x-8 gap-y-10">
-          {FEATURES.map(({ title, description, Pictorial, ready }) => (
-            <NotepadBanner key={title} className="w-56 transition hover:-translate-y-1">
+          {FEATURES.map(({ title, description, Pictorial, pin, ready }) => (
+            <NotepadBanner key={title} pin={pin} className="w-56 transition hover:-translate-y-1">
               <div className="relative flex h-full flex-col items-center px-4 pb-6 pt-4 text-center">
                 {!ready && (
                   <span className="absolute right-1 top-1 rounded-full bg-mercury/40 px-2 py-0.5 text-[0.6rem] uppercase tracking-wide text-ink/60">
                     Coming soon
                   </span>
                 )}
-                {Pictorial && <Pictorial className="mb-2 h-14 w-14 text-mercury-ink/80" />}
-                <h3 className={`mb-2 font-serif text-lg text-ink ${!Pictorial ? "mt-4" : ""}`}>
-                  {title}
-                </h3>
+                <Pictorial className="mb-2 h-14 w-14 text-mercury-ink/80" />
+                <h3 className="mb-2 font-serif text-lg text-ink">{title}</h3>
                 <p className="text-sm leading-relaxed text-ink-soft">{description}</p>
               </div>
             </NotepadBanner>

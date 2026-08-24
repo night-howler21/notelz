@@ -51,14 +51,3 @@ export function RevisionPictorial({ className = "" }: Props) {
     </svg>
   );
 }
-
-export function GamesPictorial({ className = "" }: Props) {
-  return (
-    <svg viewBox="0 0 80 80" className={className} {...common}>
-      <path d="M20 14 h40 a10 10 0 0 1 8 16 l-6 34 a8 8 0 0 1 -14 3 l-6 -9 h-4 l-6 9 a8 8 0 0 1 -14 -3 l-6 -34 a10 10 0 0 1 8 -16 Z" />
-      <path d="M28 32 v10 M23 37 h10" />
-      <circle cx="52" cy="32" r="2.2" fill="currentColor" stroke="none" />
-      <circle cx="58" cy="38" r="2.2" fill="currentColor" stroke="none" />
-    </svg>
-  );
-}

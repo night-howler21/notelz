@@ -20,6 +20,61 @@ function Doodle({ className, children }: { className: string; children: React.Re
   );
 }
 
+function SubjectIcon({
+  index,
+  className,
+  style,
+}: {
+  index: number;
+  className: string;
+  style?: React.CSSProperties;
+}) {
+  const shapes = [
+    // scales
+    <g key="scales">
+      <path d="M30 6 V38" />
+      <path d="M12 14 H48" />
+      <path d="M12 14 L4 28 Q12 34 20 28 Z" />
+      <path d="M48 14 L40 28 Q48 34 56 28 Z" />
+      <path d="M22 44 H38" />
+    </g>,
+    // gavel
+    <g key="gavel">
+      <rect x="8" y="8" width="20" height="10" rx="1.5" transform="rotate(-35 18 13)" />
+      <path d="M26 22 L40 36" />
+      <path d="M40 36 L54 50" />
+      <path d="M8 54 H36" />
+    </g>,
+    // book
+    <g key="book">
+      <path d="M30 14 C22 8, 10 8, 4 12 V46 C10 42, 22 42, 30 48" />
+      <path d="M30 14 C38 8, 50 8, 56 12 V46 C50 42, 38 42, 30 48" />
+      <path d="M30 14 V48" />
+    </g>,
+    // quill
+    <g key="quill">
+      <path d="M50 6 C24 12, 10 34, 8 54" />
+      <path d="M50 6 C44 14, 32 18, 26 28" />
+      <path d="M8 54 L16 44" />
+    </g>,
+  ];
+
+  return (
+    <svg
+      viewBox="0 0 60 60"
+      className={className}
+      style={style}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="3"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {shapes[index % shapes.length]}
+    </svg>
+  );
+}
+
 function BackdropDoodle({ className, children }: { className: string; children: React.ReactNode }) {
   return (
     <svg
@@ -116,22 +171,31 @@ export default function ChalkboardMenu({
           Your Notebooks
         </h2>
 
-        <div className="relative flex flex-col items-center gap-8">
+        <div className="relative mx-auto flex max-w-md flex-col gap-5">
           {subjects.map((subject, i) => (
             <button
               key={subject.id}
               onClick={() => onSelect(subject.id)}
-              className="font-chalk text-3xl transition hover:scale-105 sm:text-4xl"
-              style={{
-                color: CHALK_COLORS[i % CHALK_COLORS.length],
-                textShadow: "0 0 6px rgba(255,255,255,0.2)",
-              }}
+              className="flex items-center gap-3 text-left transition hover:translate-x-1"
             >
-              {subject.name}
+              <SubjectIcon
+                index={i}
+                className="h-7 w-7 shrink-0"
+                style={{ color: CHALK_COLORS[i % CHALK_COLORS.length] }}
+              />
+              <span
+                className="font-chalk text-2xl sm:text-3xl"
+                style={{
+                  color: CHALK_COLORS[i % CHALK_COLORS.length],
+                  textShadow: "0 0 6px rgba(255,255,255,0.2)",
+                }}
+              >
+                {subject.name}
+              </span>
             </button>
           ))}
 
-          <p className="mt-2 font-hand text-xl text-white/30">··· more subjects soon</p>
+          <p className="mt-2 pl-10 font-hand text-lg text-white/30">··· more subjects soon</p>
         </div>
       </motion.div>
 

@@ -150,33 +150,32 @@ export default function NotesPage() {
                 </h1>
               </div>
 
-              {/* the notebook itself — only this part gets the ruled-paper treatment */}
-              <RuledPaper className="mx-auto max-w-5xl overflow-hidden rounded-2xl border border-mercury-ink/10 shadow-xl shadow-mercury-ink/10">
-                {activeSubject.topics.length === 0 ? (
-                  <p className="py-16 text-center font-hand text-xl text-ink-soft">
-                    No notes here yet — this subject is still being written.
-                  </p>
-                ) : (
-                  <div className="flex flex-col gap-8 p-6 sm:p-8 lg:flex-row lg:items-start">
-                    <aside className="shrink-0 lg:w-72">
-                      <TopicList
-                        topics={activeSubject.topics}
-                        activeTopicId={topic?.id ?? null}
-                        onOpenTopic={openTopic}
-                      />
-                    </aside>
+              {activeSubject.topics.length === 0 ? (
+                <p className="py-16 text-center font-hand text-xl text-ink-soft">
+                  No notes here yet — this subject is still being written.
+                </p>
+              ) : (
+                <div className="mx-auto flex max-w-5xl flex-col gap-8 lg:flex-row lg:items-start">
+                  {/* plain chrome — the topic list sits on the page background, not the notebook */}
+                  <aside className="shrink-0 lg:w-72">
+                    <TopicList
+                      topics={activeSubject.topics}
+                      activeTopicId={topic?.id ?? null}
+                      onOpenTopic={openTopic}
+                    />
+                  </aside>
 
-                    <div className="flex-1">
-                      {!topic && (
-                        <p className="px-4 pt-8 text-center font-hand text-xl text-ink-soft">
-                          Pick a topic on the left to start reading.
-                        </p>
-                      )}
-                      {topic && <TopicReader topic={topic} onOpenTopic={openTopic} />}
-                    </div>
-                  </div>
-                )}
-              </RuledPaper>
+                  {/* the notebook itself — only the actual reading pane gets the ruled-paper treatment */}
+                  <RuledPaper className="min-h-[50vh] flex-1 overflow-hidden rounded-2xl border border-mercury-ink/10 p-6 shadow-xl shadow-mercury-ink/10 sm:p-8">
+                    {!topic && (
+                      <p className="px-4 pt-8 text-center font-hand text-xl text-ink-soft">
+                        Pick a topic on the left to start reading.
+                      </p>
+                    )}
+                    {topic && <TopicReader topic={topic} onOpenTopic={openTopic} />}
+                  </RuledPaper>
+                </div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>
