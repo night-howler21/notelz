@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@theme {
+  --color-mercury: #c3ddbc;
+  --color-mercury-deep: #a9cba0;
+  --color-mercury-ink: #3e5b3c;
+  --color-paper: #f6f1e7;
+  --color-paper-warm: #efe7d6;
+  --color-lavender: #c7bedd;
+  --color-peach: #efc6a4;
+  --color-coral: #de9a73;
+  --color-ink: #2b2a27;
+  --color-ink-soft: #5a564c;
+  --color-gold: #b79a5d;
+
+  --font-serif: var(--font-playfair), Georgia, serif;
+  --font-hand: var(--font-patrick-hand), "Comic Sans MS", cursive;
+  --font-caveat: var(--font-caveat), "Comic Sans MS", cursive;
+  --font-sans: var(--font-inter), Arial, sans-serif;
+  --font-chalk: var(--font-rock-salt), "Comic Sans MS", cursive;
+}
+
+body {
+  color: var(--color-ink);
+  overflow-x: clip;
+}

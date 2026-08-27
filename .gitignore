@@ -1,12 +1,17 @@
-# frontend (Next.js)
-frontend/node_modules/
-frontend/.next/
-frontend/out/
-frontend/.env.local
-frontend/*.tsbuildinfo
+# dependencies and build output
+/node_modules/
+/.next/
+/out/
+/build/
+/coverage/
 
-# backend (Maven)
-backend/target/
+# environment files
+.env*
+!.env.example
+
+# Supabase local state
+/supabase/.branches/
+/supabase/.temp/
 
 # OS / editor
 .DS_Store
@@ -16,3 +21,8 @@ Thumbs.db
 
 # logs
 *.log
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+node_modules

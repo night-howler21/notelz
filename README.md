@@ -2,59 +2,99 @@
 
 No one tells you what to study at the last minute, so we will.
 
-## Structure
+Notelz is a single Next.js 16 application backed by Supabase Auth and Supabase Postgres. It keeps the original notebook-themed design while providing signup, email-or-username login, protected subject notes, password recovery, and support-message submission.
 
-- `frontend/` — Next.js 16 (TypeScript, Tailwind v4) web app
-- `backend/` — Spring Boot 4 (Java 21, Maven) REST API
-- `prototype/` — original static HTML/CSS mockup of the homepage (superseded by `frontend/`, kept for reference)
+## Stack
 
-## Prerequisites
+- Next.js 16, React 19, TypeScript, Tailwind CSS 4, and Framer Motion
+- Supabase Auth with cookie-backed SSR sessions
+- Supabase Postgres with Row Level Security
+- SQL migrations and repeatable seed data under `supabase/`
 
-- Node.js (installed at `C:\Program Files\nodejs`)
-- Java 21 JDK — Eclipse Temurin (installed at `C:\Program Files\Eclipse Adoptium\jdk-21.0.12.101-hotspot`)
-- PostgreSQL 17 (installed at `C:\Program Files\PostgreSQL\17`, running as a Windows service on port 5432)
+There is no separate Java service. Next.js Server Actions, Server Components, and Route Handlers provide the server-side behavior.
 
-`JAVA_HOME` and the Node/JDK `bin` folders were added to your **User** PATH. New terminal windows will pick this up automatically; this session's shells needed the paths set explicitly per command.
+## Local setup
 
-## Database
+Prerequisites:
 
-A local role/database were created for development:
+- Node.js 20 or newer
+- Docker Desktop or another Docker-compatible runtime for the local Supabase stack
 
-- Database: `notelz`
-- Role: `notelz` / password `notelz`
-- Postgres superuser: `postgres` / password `postgres` (dev machine only — change before ever exposing this instance)
+Install dependencies:
 
-To open a psql shell:
-
-```bash
-"C:/Program Files/PostgreSQL/17/bin/psql.exe" -U notelz -h localhost -d notelz
+```powershell
+npm install
 ```
 
-## Running the backend
+Start Supabase and recreate its local database from the committed migration and seed:
 
-```bash
-cd backend
-./mvnw.cmd spring-boot:run
+```powershell
+npm run supabase:start
+npm run supabase:reset
 ```
 
-Starts on `http://localhost:8080` by default (override with the `PORT` env var — local dev here runs it on `8081` since Windows reserves `8080` on this machine; see `backend/dev.cmd`). Config lives in `src/main/resources/application.properties`, all overridable via env vars (`PORT`, `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `JWT_SECRET`, `JWT_EXPIRATION_MS`, `CORS_ALLOWED_ORIGINS`). `spring.jpa.hibernate.ddl-auto=update` auto-creates/updates tables from the JPA entities — fine for dev, swap for migrations (Flyway/Liquibase) before production.
+Copy `.env.example` to `.env.local`, then copy the local API URL, publishable key, and secret key shown by `npx supabase status` into that file. Never expose `SUPABASE_SECRET_KEY` to browser code or commit `.env.local`.
 
-## Running the frontend
+Start Next.js:
 
-```bash
-cd frontend
+```powershell
 npm run dev
 ```
 
-Starts on `http://localhost:3000`. `NEXT_PUBLIC_API_URL` in `frontend/.env.local` points it at the backend.
+Open `http://localhost:3000`.
 
-## What's built so far
+Local Auth is configured for immediate signup without email confirmation. The forgot-password screen intentionally displays a recovery link directly; this preserves the existing preview behavior and must be replaced with real email delivery before production use.
 
-- Homepage (`/`) — the notebook cover page: brand, nav tabs, vision statement, motto
-- `/signup`, `/login` — real auth forms wired to the backend, issue a JWT on success
-- `/dashboard` — placeholder landing page after login (session stored in `localStorage`)
-- Backend `auth` module — `User` entity, JWT issuance/validation, Spring Security filter chain (stateless, BCrypt password hashing)
+## Commands
 
-## Next up
+```text
+npm run dev               Start Next.js locally
+npm run build             Create a production build
+npm run lint              Run ESLint
+npm test                  Run unit tests
+npm run test:db           Run Supabase database/RLS tests
+npm run supabase:start    Start the local Supabase stack
+npm run supabase:stop     Stop the local Supabase stack
+npm run supabase:reset    Reapply migrations and seed locally
+npm run supabase:types    Regenerate database TypeScript types
+npm run migrate:legacy    Inspect a legacy database; dry-run by default
+```
 
-Per the build order: Subject Notes tab (notebook-style reader, hover previews, doodle layer, saved PDFs) → Last-Minute Revision + Catistor gamification → Find Tutors + 1-1 Video Sessions.
+## Legacy Spring/PostgreSQL migration
+
+The migration utility preserves users, bcrypt password hashes, roles, subjects, nested topics, related topics, and contact messages. It supports Hibernate `@Lob` columns stored as either Postgres text or large-object OIDs.
+
+Set these variables in `.env.local` or the invoking shell:
+
+```text
+LEGACY_DATABASE_URL=postgresql://...
+SUPABASE_DB_URL=postgresql://...
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_SECRET_KEY=sb_secret_...
+```
+
+Preview and reconcile counts without writing:
+
+```powershell
+npm run migrate:legacy
+```
+
+Apply explicitly:
+
+```powershell
+npm run migrate:legacy -- --apply
+```
+
+The importer is rerunnable. Legacy JWT sessions and outstanding reset tokens are deliberately not copied, so migrated users must log in again with their existing passwords.
+
+`scripts/fixtures/legacy.sql` provides a disposable integration fixture covering all roles, bcrypt credentials, nested/related topics, and both supported LOB representations. It drops and recreates legacy tables, so never run it against real data.
+
+## Data access
+
+- Authenticated users can read seeded subjects and notes.
+- Users can read only their own profile.
+- Anonymous and authenticated visitors can insert support messages.
+- Support messages cannot be read through the public Supabase API.
+- Note/profile writes require trusted administrative access outside the current UI.
+
+No deployment is performed by this repository setup.
