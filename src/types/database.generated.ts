@@ -3,6 +3,54 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export type Database = {
   public: {
     Tables: {
+      saved_topics: {
+        Row: { user_id: string; topic_id: number; saved_at: string };
+        Insert: { user_id: string; topic_id: number; saved_at?: string };
+        Update: { user_id?: string; topic_id?: number; saved_at?: string };
+        Relationships: [];
+      };
+      study_lists: {
+        Row: { id: string; user_id: string; name: string; created_at: string; updated_at: string };
+        Insert: { id?: string; user_id: string; name: string; created_at?: string; updated_at?: string };
+        Update: { id?: string; user_id?: string; name?: string; created_at?: string; updated_at?: string };
+        Relationships: [];
+      };
+      study_list_topics: {
+        Row: { list_id: string; topic_id: number; added_at: string };
+        Insert: { list_id: string; topic_id: number; added_at?: string };
+        Update: { list_id?: string; topic_id?: number; added_at?: string };
+        Relationships: [];
+      };
+      topic_annotations: {
+        Row: { user_id: string; topic_id: number; content: string; drawing_data: Json; updated_at: string };
+        Insert: { user_id: string; topic_id: number; content?: string; drawing_data?: Json; updated_at?: string };
+        Update: { user_id?: string; topic_id?: number; content?: string; drawing_data?: Json; updated_at?: string };
+        Relationships: [];
+      };
+      reading_progress: {
+        Row: {
+          user_id: string;
+          topic_id: number;
+          progress_percent: number;
+          last_read_at: string;
+          completed_at: string | null;
+        };
+        Insert: {
+          user_id: string;
+          topic_id: number;
+          progress_percent?: number;
+          last_read_at?: string;
+          completed_at?: string | null;
+        };
+        Update: {
+          user_id?: string;
+          topic_id?: number;
+          progress_percent?: number;
+          last_read_at?: string;
+          completed_at?: string | null;
+        };
+        Relationships: [];
+      };
       profiles: {
         Row: {
           id: string;

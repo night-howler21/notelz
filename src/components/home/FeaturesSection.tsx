@@ -42,7 +42,7 @@ export default function FeaturesSection() {
 
       <div className="relative mx-auto max-w-6xl">
         <p className="mb-3 text-center text-xs uppercase tracking-[0.35em] text-mercury-ink/60">
-          What Notelz gives you
+          What do you need today?
         </p>
         <h2 className="mb-14 text-center font-serif text-3xl text-mercury-ink sm:text-4xl">
           Everything you need, all in one notebook.

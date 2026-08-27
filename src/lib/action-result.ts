@@ -6,6 +6,7 @@ export type ActionErrorCode =
   | "NOT_FOUND"
   | "RATE_LIMITED"
   | "INVALID_RECOVERY"
+  | "UNAUTHORIZED"
   | "CONFIGURATION"
   | "UNKNOWN";
 

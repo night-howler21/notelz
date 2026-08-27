@@ -2,7 +2,7 @@
 
 No one tells you what to study at the last minute, so we will.
 
-Notelz is a single Next.js 16 application backed by Supabase Auth and Supabase Postgres. It keeps the original notebook-themed design while providing signup, email-or-username login, protected subject notes, password recovery, and support-message submission.
+Notelz is a single Next.js 16 application backed by Supabase Auth and Supabase Postgres. It keeps the notebook-themed design while providing signup, email-or-username login, protected subject notes, password recovery, personal saved notes, custom study lists, private annotations, reading progress, and support-message submission.
 
 ## Stack
 
@@ -32,6 +32,14 @@ Start Supabase and recreate its local database from the committed migration and 
 npm run supabase:start
 npm run supabase:reset
 ```
+
+The database files run in this order:
+
+1. `supabase/migrations/20260827000000_initial_schema.sql` creates profiles, subjects, topics, relationships, contact messages, grants, and RLS.
+2. `supabase/migrations/20260827010000_personal_study_tools.sql` adds saved topics, custom lists, private annotations/drawing data, reading progress, grants, and owner-only RLS.
+3. `supabase/seed.sql` adds starter note collections for Constitutional Law, Torts, Contract Law, and Family Law.
+
+If you use the hosted Supabase SQL editor instead of the CLI, apply both migrations in order and run the seed last.
 
 Copy `.env.example` to `.env.local`, then copy the local API URL, publishable key, and secret key shown by `npx supabase status` into that file. Never expose `SUPABASE_SECRET_KEY` to browser code or commit `.env.local`.
 

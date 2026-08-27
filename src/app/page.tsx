@@ -3,6 +3,7 @@ import AboutSection from "@/components/home/AboutSection";
 import FeaturesSection from "@/components/home/FeaturesSection";
 import HowItWorksSection from "@/components/home/HowItWorksSection";
 import SiteFooter from "@/components/home/SiteFooter";
+import SupportingTabsSection from "@/components/home/SupportingTabsSection";
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
         <AboutSection />
         <FeaturesSection />
         <HowItWorksSection />
+        <SupportingTabsSection />
       </main>
       <SiteFooter />
     </>

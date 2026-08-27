@@ -13,15 +13,17 @@ export const ruledPaperStyle: CSSProperties = {
 export default function RuledPaper({
   children,
   className = "",
+  ruled = true,
 }: {
   children: ReactNode;
   className?: string;
+  ruled?: boolean;
 }) {
   return (
     <div
       className={`relative ${className}`}
       style={{
-        ...ruledPaperStyle,
+        ...(ruled ? ruledPaperStyle : { backgroundColor: "#FBF8EF" }),
         boxShadow: "inset 0 1px 3px rgba(62,91,60,0.12)",
       }}
     >

@@ -1,7 +1,7 @@
 begin;
 
 create extension if not exists pgtap with schema extensions;
-select extensions.plan(9);
+select extensions.plan(14);
 
 insert into auth.users (id, email, raw_user_meta_data)
 values
@@ -10,6 +10,10 @@ values
 
 insert into public.subjects (id, name, color_hex, sort_order)
 values (9001, 'Policy Test', '#A9CBA0', 9001)
+on conflict (id) do nothing;
+
+insert into public.topics (id, subject_id, title, sort_order, preview_snippet, content)
+values (9001, 9001, 'Policy Topic', 0, 'Preview', 'Content')
 on conflict (id) do nothing;
 
 select extensions.is(
@@ -49,6 +53,24 @@ select extensions.lives_ok(
   $$insert into public.contact_messages (name, email, message) values ('Student', 'student@example.com', 'Help')$$,
   'authenticated users can submit contact messages'
 );
+select extensions.lives_ok(
+  $$insert into public.saved_topics (user_id, topic_id) values ('00000000-0000-0000-0000-000000000001', 9001)$$,
+  'users can save a topic to their own library'
+);
+select extensions.throws_ok(
+  $$insert into public.saved_topics (user_id, topic_id) values ('00000000-0000-0000-0000-000000000002', 9001)$$,
+  '42501',
+  'users cannot write to another user library'
+);
+select extensions.is(
+  (select count(*)::integer from public.saved_topics),
+  1,
+  'users see only their own saved topics'
+);
+select extensions.lives_ok(
+  $$insert into public.topic_annotations (user_id, topic_id, content) values ('00000000-0000-0000-0000-000000000001', 9001, 'Private')$$,
+  'users can create private annotations'
+);
 
 reset role;
 set local role anon;
@@ -67,6 +89,11 @@ select extensions.throws_ok(
   $$select * from public.contact_messages$$,
   '42501',
   'contact submissions cannot be read through the public API'
+);
+select extensions.throws_ok(
+  $$select * from public.saved_topics$$,
+  '42501',
+  'anonymous visitors cannot read personal libraries'
 );
 
 reset role;

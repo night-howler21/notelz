@@ -3,10 +3,10 @@ import { ScalesDoodle, GavelDoodle, QuillDoodle, BookDoodle } from "./Doodles";
 
 const NAV_LINKS = [
   { label: "About", href: "#about" },
-  { label: "Blogs", href: undefined },
+  { label: "Blogs", href: "#journal" },
   { label: "Services", href: "#services" },
-  { label: "Notifications", href: undefined },
-  { label: "Notes", href: "#services" },
+  { label: "Notifications", href: "#updates" },
+  { label: "Notes", href: "/notes" },
 ] as const;
 
 function MercuryEmblem() {
@@ -55,7 +55,7 @@ export default function CoverPage() {
             Notelz
           </div>
           <div className="pl-0.5 text-[0.65rem] uppercase tracking-[0.28em] text-mercury-ink/75">
-            Est. for the diligent mind
+            No one tells you what to study at the last minute — so we will.
           </div>
         </div>
 
@@ -111,7 +111,7 @@ export default function CoverPage() {
 
         <p className="relative mb-10 max-w-[36ch] pt-6 font-serif text-lg text-ink-soft sm:text-xl">
           <span className="absolute left-1/2 top-0 h-0.5 w-11 -translate-x-1/2 bg-gold" />
-          Everything you need to know, exactly when you need to know it.
+          A calm, organised place for structured notes, focused revision, and deliberate learning.
         </p>
 
         <div className="flex flex-col gap-4 sm:flex-row">
